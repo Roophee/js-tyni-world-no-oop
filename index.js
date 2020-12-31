@@ -1,13 +1,12 @@
 "use strict";
 
-class Organism {
-    constructor(name, gender, saying, legs,hands, tail ){
+class Inhabitant  {
+    constructor(name, gender, saying, legs=4, tail= 1 ){
         this.name = name;
         this.gender = gender;
         this.species = this.constructor.name.toLowerCase();
         this.saying = saying;
         this.legs = legs;
-        this.hands = hands;
         this.tail = tail;
         this.friends = [];
     }
@@ -17,36 +16,46 @@ class Organism {
     }
 
     description(){
-        let descriptionArray = [this.name, this.gender,this.species, this.saying, this.legs, this.hands, this.tail];
-        this.friends.length === 0? descriptionArray.push('none'):descriptionArray.push(this.friends);
-        return descriptionArray;
+        let descriptionArray = ['name: '+ this.name,
+            'gender: '+ this.gender,
+            'species: '+ this.species,
+            'saying: '+ this.saying,
+            'legs: '+ this.legs,
+            'tail: '+ this.tail,
+            'friends: '+ (this.friends.length === 0? 'none' : this.friends),
+        ];
+        return descriptionArray.join('; ');
     }
 }
 
-class Dog extends Organism {
+class Dog extends Inhabitant  {
     static saying = 'Woof-Woof!';
     constructor(name, gender){
-        super(name, gender, Dog.saying, 4,0,1);
+        super(name, gender, Dog.saying);
     }
 }
 
-class Cat extends Organism {
+class Cat extends Inhabitant  {
     static saying = 'Meow!';
     constructor(name, gender){
-        super(name, gender, Cat.saying, 4,0,1);
+        super(name, gender, Cat.saying);
     }
 }
 
-class Human extends Organism {
+class Human extends Inhabitant  {
     static saying = 'Cogito ergo sum!';
-    constructor(name, gender,saying){
-        saying? super(name, gender, saying, 2,2,0):super(name, gender, Human.saying, 2,2,0);
+    constructor(name, gender,saying, legs= 2, tail = 'none'){
+        super(name, gender, saying || Human.saying, legs, tail)
+        this.hands = 2;
+    }
+    description() {
+        return [super.description(),'hands: '+this.hands].join(';');
     }
 }
 
 class WomanCat extends Human {
     constructor(name, gender){
-        super(name, gender, Cat.saying, 2,2,0);
+        super(name, gender, Cat.saying);
     }
 }
 
@@ -62,4 +71,4 @@ man.addFriends(woman);
 woman.addFriends(man, cat, dog);
 hero.addFriends(man, woman, cat, dog);
 
-population.forEach(item =>print(item.description().join(';')));
+population.forEach(item =>print(item.description()));
